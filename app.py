@@ -8,6 +8,16 @@ from peewee import *
 from flask_peewee.admin import Admin, ModelAdmin
 from flask_peewee.rest import RestAPI, UserAuthentication
 
+import guitarparty
+guitarparty.api_key = 'f97a2b52acb6878a5ba3b19f2e78b7a28d831897'
+GP = guitarparty.Guitarparty()
+
+#GP.create_songbook('Test songbook')
+
+for songbook in GP.get_songbooks():
+    print songbook['title'] + songbook['uri']
+
+
 # configure our database
 DATABASE = {
     'name': 'jamalong.db',
