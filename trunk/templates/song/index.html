@@ -1,0 +1,8 @@
+{% extends "song/layout.html" %}
+{% block body %}
+    <!-- template -->
+    {% for song in object_list %}
+        {# render the songs here #}
+        {{ song.artist }} - {{ song.title }}<br>
+    {% endfor %}
+{% endblock %}
