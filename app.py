@@ -12,11 +12,22 @@ import guitarparty
 guitarparty.api_key = 'f97a2b52acb6878a5ba3b19f2e78b7a28d831897'
 GP = guitarparty.Guitarparty()
 
-#GP.create_songbook('Test songbook')
+#GP.create_songbook('Ernies songbook')
 
 for songbook in GP.get_songbooks():
     print songbook['title'] + songbook['uri']
 
+for song in GP.get_query_songs('Jolene'):
+    print song['body'] +  ' ' + song['title'] + ' ' + song['uri']
+
+song = GP.get_song('/api/v2/songs/3207/')
+print song
+
+for artists in GP.get_query_artists('Dolly Parton'):
+    print artists['name'] + artists['uri']
+
+artist = GP.get_artist('/api/v2/artists/1/')
+print artist
 
 # configure our database
 DATABASE = {
@@ -58,10 +69,6 @@ api = RestAPI(app, default_auth=user_auth)
 api.register(Song)
 
 api.setup()
-
-#TODO :
-#   connect to guitarparty.com
-#   implement upload
 
 @app.route('/')
 def index(title=None):

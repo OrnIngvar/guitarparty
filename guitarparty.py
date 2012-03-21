@@ -28,9 +28,27 @@ class Guitarparty(object):
         self.api_key = api_key or _globals['api_key']
         self.api_endpoint = api_endpoint or _globals['api_endpoint']
         self.url = '%s%s' % (self.host, self.api_endpoint)
+        self.head = { 'Guitarparty-Api-Key' : self.api_key }
 
-    # TODO : functions for songs
-    # TODO : functions for artists
+    def get_query_songs(self, query):
+        url = '%s/songs/?query=%s&' % (self.url, query)
+        r = self.make_request( 'get', url , headers=self.head )
+        return deserialize( r.content )
+
+    def get_song(self, uri):
+        url = '%s%s' % (self.host, uri)
+        r = self.make_request( 'get', url )
+        return deserialize(r.content)
+
+    def get_query_artists(self, query):
+        url = '%s/artists/?query=%s&' % (self.url, query)
+        r = self.make_request( 'get', url , headers=self.head )
+        return deserialize( r.content )
+
+    def get_artist(self, uri):
+        url = '%s%s' % (self.host, uri)
+        r = self.make_request( 'get', url )
+        return deserialize(r.content)
 
     def get_songbooks(self):
         url = '%s/songbooks/' % (self.url)
