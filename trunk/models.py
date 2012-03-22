@@ -7,5 +7,7 @@ class Song(db.Model):
     title = TextField()
     artist = TextField()
     album = TextField()
+    path = TextField()
     created = DateTimeField(default=datetime.datetime.now)
+
 
