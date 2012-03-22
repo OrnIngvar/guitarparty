@@ -1,4 +1,4 @@
-__author__ = 'orningvarasbjornsson'
+import os
 
 # config
 class Configuration(object):
@@ -9,3 +9,8 @@ class Configuration(object):
         }
     DEBUG = True
     SECRET_KEY = 'ssshhhh123456789uuuuuuuuyyyyy'
+    PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+    UPLOADED_FILES_DEST = os.path.join(PROJECT_PATH, 'tmp/')
+    ALLOWED_EXTENSIONS = {'mp3'}
+
+

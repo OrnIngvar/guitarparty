@@ -1,5 +1,3 @@
-__author__ = 'orningvarasbjornsson'
-
 from flask_peewee.rest import RestAPI, RestResource, UserAuthentication, AdminAuthentication, RestrictOwnerResource
 
 from app import app
