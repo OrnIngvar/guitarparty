@@ -1,5 +1,3 @@
-__author__ = 'orningvarasbjornsson'
-
 from app import app, db
 
 from auth import *

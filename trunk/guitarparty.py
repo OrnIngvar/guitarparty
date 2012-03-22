@@ -51,7 +51,7 @@ class Guitarparty(object):
         return deserialize(r.content)
 
     def get_songbooks(self):
-        url = '%s/songbooks/' % (self.url)
+        url = '%s/songbooks/' % self.url
         r = self.make_request('get', url)
         return deserialize(r.content)
 
@@ -61,7 +61,7 @@ class Guitarparty(object):
         return deserialize(r.content)
 
     def create_songbook(self, title, description=None, is_public=False):
-        url = '%s/songbooks/' % (self.url)
+        url = '%s/songbooks/' % self.url
         data = {
             'title': title,
             'description': description,
