@@ -13,7 +13,7 @@ from models import Song
 def index(title=None):
 #    return 'JamAlong'
 #    title = 'JamAlong'
-    return render_template('base.html', title=title)
+    return render_template('index.html', title=title)
 
 @app.route('/songs/', methods=['GET', 'POST'])
 def song_list():
