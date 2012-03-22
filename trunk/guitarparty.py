@@ -12,7 +12,7 @@ logger.addHandler(logging.StreamHandler())
 
 host = 'http://www.guitarparty.com'
 api_endpoint = '/api/v2'
-api_key = None
+api_key = 'f97a2b52acb6878a5ba3b19f2e78b7a28d831897'
 
 def deserialize(raw_data):
     data = json.loads(raw_data)
