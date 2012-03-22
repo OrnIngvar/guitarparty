@@ -1,5 +1,6 @@
 import eyeD3
 from models import Song
+import guitarparty
 
 def process_mp3_song(path):
     tag = eyeD3.Tag()
@@ -13,4 +14,8 @@ def process_mp3_song(path):
     song.album = tag.getAlbum()
     song.path = path
     song.save()
-    print 'eyeD3'
+
+    GP = guitarparty.Guitarparty()
+    for artists in GP.get_query_artists( tag.getArtist() ):
+        print artists['name'] + artists['uri']
+
