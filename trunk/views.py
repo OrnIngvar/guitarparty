@@ -1,8 +1,11 @@
+from base64 import b64decode
 import os
 import datetime
+
 from werkzeug.utils import secure_filename
 from flask import request, redirect, url_for, render_template, flash
 from flask_peewee.utils import get_object_or_404, object_list
+from werkzeug.wrappers import Response
 
 from app import app
 from auth import auth
@@ -34,11 +37,13 @@ def song_detail(id):
     return render_template('song/detail.html', song=song)
 
 @app.route('/api/songs/upload', methods=['POST'])
-def upload_file(file):
-#        file = request.files['file']
+def upload_file():
+    file = request.files.get('file')
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        print os.path.join(app.config['UPLOADED_FILES_DEST'], filename)
         file.save(os.path.join(app.config['UPLOADED_FILES_DEST'], filename))
-        return render_template('index.html', filename=filename)
+        return Response('ok')
+    else:
+        return 404
+
 

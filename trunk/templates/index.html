@@ -27,8 +27,13 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../static/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="../static/ico/apple-touch-icon-57-precomposed.png">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
      <script>
         $(document).ready(function () {
+            var bar = $('.bar');
+            var percent = $('.percent');
+            var status = $('#status');
+
             $.getJSON("http://127.0.0.1:5000/api/song/",
             {
                 format: "json"
@@ -47,6 +52,24 @@
                 'class': 'my_song_book',
                 html: elem.join('')
                 }).appendTo('#songs');
+
+                $('#upload_form').ajaxForm({
+                    beforeSend: function() {
+                        status.empty();
+                        var percentVal = '0%';
+                        bar.width(percentVal)
+                        percent.html(percentVal);
+                    },
+                    uploadProgress: function(event, position, total, percentComplete) {
+                        var percentVal = percentComplete + '%';
+                        bar.width(percentVal)
+                        percent.html(percentVal);
+                        //console.log(percentVal, position, total);
+                    },
+                    complete: function(xhr) {
+                        status.html(xhr.responseText);
+                    }
+                });
             });
         });
      </script>
@@ -78,15 +101,21 @@
 
       <h1>My song book</h1>
       <div id="songs"></div>
-        {{ filename }}
+        <div id="result"></div>
         <div id="upload">
             <title>Upload new File</title>
             <h1>Upload new File</h1>
-            <form action="/api/songs/upload" method=post enctype=multipart/form-data>
+            <form id="upload_form" action="/api/songs/upload" enctype=multipart/form-data>
                 <p><input type=file name=file>
                     <input type=submit value=Upload>
             </form>
         </div>
+        <div class="progress">
+            <div class="bar"></div >
+            <div class="percent">0%</div >
+        </div>
+
+        <div id="status"></div>
     </div> <!-- /container -->
 
     <!-- Le javascript
