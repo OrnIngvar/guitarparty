@@ -29,7 +29,25 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
      <script>
         $(document).ready(function () {
-            $("p").text("The DOM is now loaded and can be manipulated.");
+            $.getJSON("http://127.0.0.1:5000/api/song/",
+            {
+                format: "json"
+            },
+            function(json) {
+                var items = [];
+                var elem = [];
+
+                items = json.objects;
+
+                for (var i = 0; i < items.length; i++){
+                    console.log(items[i].title);
+                    elem.push('<li id="song_id_' + items[i].id + '">title: ' + items[i].title + '</li>');
+                }
+            $('<ul/>', {
+                'class': 'my_song_book',
+                html: elem.join('')
+                }).appendTo('#songs');
+            });
         });
      </script>
   </head>
@@ -58,27 +76,15 @@
 
     <div class="container">
 
-      <h1>Bootstrap starter template</h1>
-      <p>Not loaded yet.</p>
+      <h1>My song book</h1>
+      <div id="songs"></div>
 
     </div> <!-- /container -->
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../static/js/jquery.js"></script>
-    <script src="../static/js/bootstrap-transition.js"></script>
-    <script src="../static/js/bootstrap-alert.js"></script>
-    <script src="../static/js/bootstrap-modal.js"></script>
-    <script src="../static/js/bootstrap-dropdown.js"></script>
-    <script src="../static/js/bootstrap-scrollspy.js"></script>
-    <script src="../static/js/bootstrap-tab.js"></script>
-    <script src="../static/js/bootstrap-tooltip.js"></script>
-    <script src="../static/js/bootstrap-popover.js"></script>
-    <script src="../static/js/bootstrap-button.js"></script>
-    <script src="../static/js/bootstrap-collapse.js"></script>
-    <script src="../static/js/bootstrap-carousel.js"></script>
-    <script src="../static/js/bootstrap-typeahead.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
 
   </body>
 </html>
