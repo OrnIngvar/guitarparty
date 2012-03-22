@@ -1,4 +1,3 @@
-from base64 import b64decode
 import os
 import datetime
 
@@ -10,6 +9,7 @@ from werkzeug.wrappers import Response
 from app import app
 from auth import auth
 from models import Song
+from utils import process_mp3_song
 
 
 def allowed_file(filename):
@@ -42,6 +42,8 @@ def upload_file():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOADED_FILES_DEST'], filename))
+        fullpath = os.path.join(app.config['UPLOADED_FILES_DEST'], filename)
+        process_mp3_song(fullpath)
         return Response('ok')
     else:
         return 404
