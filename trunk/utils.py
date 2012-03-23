@@ -5,17 +5,29 @@ import guitarparty
 def process_mp3_song(path):
     tag = eyeD3.Tag()
     tag.link(path)
-    print tag.getTitle()
-    print tag.getArtist()
-    print tag.getAlbum()
     song = Song()
-    song.title = tag.getTitle()
-    song.artist = tag.getArtist()
-    song.album = tag.getAlbum()
-    song.path = path
-    song.save()
+    if tag.getTitle() and tag.getTitle() and tag.getAlbum() :
+        song.title = tag.getTitle()
+        song.artist = tag.getArtist()
+        song.album = tag.getAlbum()
+        song.path = path
+        song.save()
+        # TODO : Remove this test code
+        query_guitarparty_for_artist( tag.getArtist() )
+        query_guitarparty_for_song( tag.getTitle() )
+        return 'ok'
+    elif path:
+        song.path = path
+        song.save()
+        return 'no tags'
 
+def query_guitarparty_for_artist(artist):
     GP = guitarparty.Guitarparty()
-    for artists in GP.get_query_artists( tag.getArtist() ):
-        print artists['name'] + artists['uri']
+    for artists in GP.get_query_artists( artist ):
+        print artists['name'] + ' ' + artists['uri']
+
+def query_guitarparty_for_song( song_title ):
+    GP = guitarparty.Guitarparty()
+    for song in GP.get_query_songs( song_title ):
+        print song['title']
 
