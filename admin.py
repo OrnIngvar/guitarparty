@@ -5,7 +5,7 @@ from auth import auth
 from models import Song
 
 class SongAdmin(ModelAdmin):
-    columns = ('title', 'artist', 'album', 'created',)
+    columns = ('title', 'artist', 'album', 'genre', 'path', 'created',)
 
 admin = Admin(app, auth)
 admin.register(Song, SongAdmin)
