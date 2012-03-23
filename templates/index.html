@@ -30,11 +30,13 @@
     <script src="http://malsup.github.com/jquery.form.js"></script>
      <script>
         $(document).ready(function () {
+
             var bar = $('.bar');
             var percent = $('.percent');
             var status = $('#status');
 
-            $.getJSON("http://127.0.0.1:5000/api/song/",
+            function getSongs() {
+                $.getJSON("http://127.0.0.1:5000/api/song/",
             {
                 format: "json"
             },
@@ -44,33 +46,41 @@
 
                 items = json.objects;
 
+                $('.table > tbody').remove();
+
                 for (var i = 0; i < items.length; i++){
                     console.log(items[i].title);
-                    elem.push('<li id="song_id_' + items[i].id + '">title: ' + items[i].title + '</li>');
+                    elem.push('<tr><td>' + items[i].title + '</td>'+
+                            '<td>' + items[i].artist + '</td>'+
+                            '<td>' + items[i].album + '</td>'+
+                            '</tr>');
                 }
-            $('<ul/>', {
-                'class': 'my_song_book',
-                html: elem.join('')
-                }).appendTo('#songs');
-
-                $('#upload_form').ajaxForm({
-                    beforeSend: function() {
-                        status.empty();
-                        var percentVal = '0%';
-                        bar.width(percentVal)
-                        percent.html(percentVal);
-                    },
-                    uploadProgress: function(event, position, total, percentComplete) {
-                        var percentVal = percentComplete + '%';
-                        bar.width(percentVal)
-                        percent.html(percentVal);
-                        //console.log(percentVal, position, total);
-                    },
-                    complete: function(xhr) {
-                        status.html(xhr.responseText);
-                    }
+                $('<tbody/>', {
+                    html: elem.join('')
+                    }).appendTo('.table');
                 });
+            }
+
+            $('#upload_form').ajaxForm({
+                beforeSend: function() {
+                    status.empty();
+                    var percentVal = '0%';
+                    bar.width(percentVal)
+                    percent.html(percentVal);
+                },
+                uploadProgress: function(event, position, total, percentComplete) {
+                    var percentVal = percentComplete + '%';
+                    bar.width(percentVal)
+                    percent.html(percentVal);
+                    //console.log(percentVal, position, total);
+                },
+                complete: function(xhr) {
+                    status.html(xhr.responseText);
+                    getSongs();
+                }
             });
+
+            getSongs();
         });
      </script>
   </head>
@@ -88,8 +98,8 @@
           <a class="brand" href="#">JamAlong</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
+              <li class="active"><a href="#">My song book</a></li>
+              <li><a href="#about">Upload song</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
           </div><!--/.nav-collapse -->
@@ -98,24 +108,40 @@
     </div>
 
     <div class="container">
-
-      <h1>My song book</h1>
-      <div id="songs"></div>
-        <div id="result"></div>
-        <div id="upload">
-            <title>Upload new File</title>
-            <h1>Upload new File</h1>
-            <form id="upload_form" action="/api/songs/upload" enctype=multipart/form-data>
-                <p><input type=file name=file>
-                    <input type=submit value=Upload>
-            </form>
+        <div class="row">
+            <div class="span8">
+                <div class="page-header">
+                    <h1>My song book</h1>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Song name</th>
+                      <th>Artist</th>
+                      <th>Album</th>
+                    </tr>
+                  </thead>
+                </table>
+                <div id="result"></div>
+            </div>
+            <div class="span4">
+                <div id="upload">
+                    <div class="page-header">
+                        <h1>Upload new song</h1>
+                    </div>
+                    <form class="well form-inline" id="upload_form" action="/api/songs/upload" enctype="multipart/form-data">
+                        <input type="file" class="btn" name="file" >
+                        <input type="submit" class="btn" value="Upload ">
+                        <p>
+                        <div class="progress progress-striped">
+                            <div class="bar" tyle="width: 40%;"></div >
+                        </div>
+                        <div id="status"></div>
+                        </p>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="progress">
-            <div class="bar"></div >
-            <div class="percent">0%</div >
-        </div>
-
-        <div id="status"></div>
     </div> <!-- /container -->
 
     <!-- Le javascript
