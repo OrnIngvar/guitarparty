@@ -43,9 +43,11 @@ def upload_file():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOADED_FILES_DEST'], filename))
         fullpath = os.path.join(app.config['UPLOADED_FILES_DEST'], filename)
-        process_mp3_song(fullpath)
-        return Response('ok')
+        if process_mp3_song(fullpath) == 'ok':
+            return Response('ok')
+        else:
+            return Response('song saved but no tags found. chords or lyrics will not be available')
     else:
-        return 404
+        return Response('not a valid filetype')
 
 
