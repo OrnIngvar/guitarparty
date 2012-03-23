@@ -1,4 +1,5 @@
 import eyeD3
+from app import app
 from models import Song
 import guitarparty
 
@@ -13,13 +14,17 @@ def process_mp3_song(path):
         song.path = path
         song.save()
         # TODO : Remove this test code
-        query_guitarparty_for_artist( tag.getArtist() )
-        query_guitarparty_for_song( tag.getTitle() )
+#        query_guitarparty_for_artist( tag.getArtist() )
+#        query_guitarparty_for_song( tag.getTitle() )
         return 'ok'
     elif path:
         song.path = path
         song.save()
         return 'no tags'
+
+def allowed_file(filename):
+    return '.' in filename and\
+        filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 def query_guitarparty_for_artist(artist):
     GP = guitarparty.Guitarparty()

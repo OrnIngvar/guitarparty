@@ -10,7 +10,8 @@ class Configuration(object):
     DEBUG = True
     SECRET_KEY = 'ssshhhh123456789uuuuuuuuyyyyy'
     PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
-    UPLOADED_FILES_DEST = os.path.join(PROJECT_PATH, 'tmp/')
+    SAVE_PATH = 'tmp/'
+    UPLOADED_FILES_DEST = os.path.join(PROJECT_PATH, SAVE_PATH)
     ALLOWED_EXTENSIONS = {'mp3'}
 
 
