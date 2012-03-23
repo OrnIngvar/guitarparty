@@ -12,7 +12,7 @@ def process_mp3_song(path):
         s_id = s.id
         song_is_dupe = True
 
-    if tag.getTitle() and tag.getTitle() and tag.getAlbum() and tag.getGenre().getName() and not song_is_dupe:
+    if tag.getTitle() and tag.getTitle() and tag.getAlbum() and tag.getGenre() and not song_is_dupe:
         song.title = tag.getTitle()
         song.artist = tag.getArtist()
         song.album = tag.getAlbum()
@@ -22,11 +22,13 @@ def process_mp3_song(path):
         return 'ok'
     # Song already exists in db so we only update the tags if by any chance the user updated them and uploaded again
     elif song_is_dupe:
+        print 'song is duplicate'
         song.id = s_id
         song.title = tag.getTitle()
         song.artist = tag.getArtist()
         song.album = tag.getAlbum()
         song.genre = tag.getGenre().getName()
+        print tag.getGenre().getName()
         song.update()
         return 'ok'
     elif path:
