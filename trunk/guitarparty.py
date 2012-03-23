@@ -31,10 +31,8 @@ class Guitarparty(object):
         self.head = { 'Guitarparty-Api-Key' : self.api_key }
 
     def get_query_songs(self, query):
-        print query
         url = '%s/songs/?query=%s&' % (self.url, query)
         r = self.make_request( 'get', url , headers=self.head )
-        print r.content
         return r.content
 
     def get_song(self, uri):

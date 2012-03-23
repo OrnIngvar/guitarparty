@@ -2,7 +2,7 @@ import os
 
 # config
 class Configuration(object):
-# configure our database
+    # configure our database
     DATABASE = {
         'name': 'jamalong.db',
         'engine': 'peewee.SqliteDatabase',
