@@ -1,0 +1,9 @@
+flask
+werkzeug
+jinja2
+peewee
+wtforms
+wtf-peewee
+flask_peewee
+requests
+eyeD3
