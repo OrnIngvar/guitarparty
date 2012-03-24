@@ -83,12 +83,19 @@
 
                     items = json.objects;
 
-                    $('#chords-container > pre').remove();
+                    $('#chords-container > div').remove();
 
                     for (var i = 0; i < items.length; i++){
-                        elem.push(items[i].body);
+                        var html = '';
+                        html += '<p><strong>' + items[i].title + '</strong></p>';
+                        var chords = items[i].chords;
+                        for (var j = 0; j < chords.length; j++ ) {
+                            html += '<img src="'+ chords[j].image_url + '"></img>';
+                        }
+                        html += '<p><pre>'+ items[i].body +'</pre></p>';
+                        elem.push(html);
                     }
-                    $('<pre/>', {
+                    $('<div/>', {
                         html: elem.join('')
                         }).appendTo('#chords-container');
                 });
@@ -127,6 +134,22 @@
                     getChords(tdItem.text());
                 }
             });
+
+            $('#tbl-songs').on("click", "th", function(event) {
+                var thItem = $(this).text();
+                if ( thItem.trim() === 'Song name' ){
+                    getOrderedSongs('title');
+                }
+                if( thItem.trim() === 'Artist' ){
+                    getOrderedSongs('artist');
+                }
+                if( thItem.trim() === 'Album' ){
+                    getOrderedSongs('album');
+                }
+                if( thItem.trim() === 'Genre' ){
+                    getOrderedSongs('genre');
+                }
+            });
 
             getSongs();
         });
