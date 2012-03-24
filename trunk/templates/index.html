@@ -35,13 +35,23 @@
             var percent = $('.percent');
             var status = $('#status');
             var order = '';
+            var filter = '';
             function getOrderedSongs(params) {
                 if (order === ''){
-                    getSongs('ordering='+params);
-                    order = '-'
+                    if (filter === ''){
+                        getSongs('ordering='+params);
+                        order = '-';
+                    }else{
+                        getSongs(filter+'&ordering='+params);
+                        order = '-';
+                    }
                 }else{
-                    getSongs('ordering='+order+params);
-                    order = '';
+                    if (filter === ''){
+                        getSongs('ordering='+order+params);
+                        order = '';
+                    }else{
+                        getSongs(filter+'&ordering='+order+params);
+                    }
                 }
             }
             function getSongs(params) {
@@ -105,12 +115,12 @@
                 beforeSend: function() {
                     status.empty();
                     var percentVal = '0%';
-                    bar.width(percentVal)
+                    bar.width(percentVal);
                     percent.html(percentVal);
                 },
                 uploadProgress: function(event, position, total, percentComplete) {
                     var percentVal = percentComplete + '%';
-                    bar.width(percentVal)
+                    bar.width(percentVal);
                     percent.html(percentVal);
                     //console.log(percentVal, position, total);
                 },
@@ -123,6 +133,7 @@
                 var field = $("#filter-field").val();
                 var type = $("#filter-type").val();
                 var value = $("#filter-value").val();
+                filter = field+type+value;
                 console.log(field+type+value);
                 getSongs(field+type+value);
                 return false;
@@ -150,7 +161,7 @@
 
 
             $('#tbl-songs').on("click", "tr", function(event) {
-                tdItem =  $(this).find("td:eq(1)");
+                var tdItem =  $(this).find("td:eq(1)");
                 if (tdItem.text()){
                     getChords(tdItem.text());
                 }
@@ -214,7 +225,7 @@
                                 <option value="__istartswith=">starts with</option>
                             </select>
 
-                            <input type="text" id="filter-value" name="filter-value" >
+                            <input type="text" class="input-medium" id="filter-value" name="filter-value" >
                             <input type="submit" class="btn" value="Apply filter ">
                             <div class="btn" id="btn-reset-filter">Reset filter</div>
                             <div class="btn" id="btn-hide-filter">Done</div>
