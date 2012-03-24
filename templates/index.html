@@ -159,11 +159,40 @@
                 getSongs('');
             });
 
-
             $('#tbl-songs').on("click", "tr", function(event) {
                 var tdItem =  $(this).find("td:eq(1)");
                 if (tdItem.text()){
                     getChords(tdItem.text());
+                    $.getJSON("/api/song/?title=" + tdItem.text(),
+                    {
+                        format: "json"
+                    },
+                    function(json) {
+                        var items = [];
+                        var elem = [];
+                        var path;
+                        var re = '\/';
+
+                        items = json.objects;
+
+                        $('#media-player > div').remove();
+
+                        for (var i = 0; i < items.length; i++) {
+                            path = items[i].path;
+                        }
+
+                        var currPath = path.split(re);
+
+                        elem.push('<audio autoplay="autoplay">'+
+                                  '<source src="/api/song/uploads/' + currPath[1] + '"' + 'type="audio/mpeg"/>'+
+                                  'Your browser does not support the audio element.'+
+                                  '</audio>');
+                        $('<div/>', {
+                            html: elem.join('')
+                        }).appendTo('#media-player');
+
+                        tdItemAudio.html('<a href="#" class="icon-stop" id="stop"/>');
+                    });
                 }
             });
 
@@ -189,6 +218,7 @@
   </head>
 
   <body>
+  <div id="media-player"></div>
 
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
