@@ -50,9 +50,11 @@
 
                 for (var i = 0; i < items.length; i++){
                     console.log(items[i].title);
-                    elem.push('<tr><td>' + items[i].title + '</td>'+
+                    elem.push('<tr><td><a href="#" class="icon-play"/></td>'+
+                            '<td>' + items[i].title + '</td>'+
                             '<td>' + items[i].artist + '</td>'+
                             '<td>' + items[i].album + '</td>'+
+                            '<td>' + items[i].genre + '</td>'+
                             '</tr>');
                 }
                 $('<tbody/>', {
@@ -80,6 +82,13 @@
                 }
             });
 
+            $("#upload_song").click(function () {
+                $("#upload").toggle();
+            });
+            $("#btn-hide-upload").click(function () {
+                $("#upload").toggle();
+            });
+
             getSongs();
         });
      </script>
@@ -98,17 +107,15 @@
           <a class="brand" href="#">JamAlong</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="#">My song book</a></li>
-              <li><a href="#about">Upload song</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><a id="upload_song" href="#">Upload song</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
 
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="row-fluid">
             <div class="span8">
                 <div class="page-header">
                     <h1>My song book</h1>
@@ -116,22 +123,25 @@
                 <table class="table">
                   <thead>
                     <tr>
+                      <th>#</th>
                       <th>Song name</th>
                       <th>Artist</th>
                       <th>Album</th>
+                      <th>Genre</th>
                     </tr>
                   </thead>
                 </table>
                 <div id="result"></div>
             </div>
             <div class="span4">
-                <div id="upload">
+                <div id="upload" hidden="hidden">
                     <div class="page-header">
                         <h1>Upload new song</h1>
                     </div>
                     <form class="well form-inline" id="upload_form" action="/api/songs/upload" enctype="multipart/form-data">
                         <input type="file" class="btn" name="file" >
                         <input type="submit" class="btn" value="Upload ">
+                        <div class="btn" id="btn-hide-upload">Done</div>
                         <p>
                         <div class="progress progress-striped">
                             <div class="bar" tyle="width: 40%;"></div >
@@ -139,6 +149,11 @@
                         <div id="status"></div>
                         </p>
                     </form>
+                </div>
+                <div id="chords">
+                    <div class="page-header">
+                        <h1>Chords</h1>
+                    </div>
                 </div>
             </div>
         </div>
@@ -148,6 +163,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="../static/js/bootstrap.js"></script>
-
+    <script src="../static/js/jquery.mplayer.js"></script>
   </body>
 </html>
