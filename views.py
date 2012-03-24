@@ -1,15 +1,10 @@
 import os
-import datetime
-
 from werkzeug.utils import secure_filename
-from flask import request, redirect, url_for, render_template, flash
-from flask_peewee.utils import get_object_or_404, object_list
+from flask import request, render_template, send_from_directory
 from werkzeug.wrappers import Response
 from db import process_mp3_song
 from app import app
-from auth import auth
 import guitarparty
-from models import Song
 from utils import allowed_file
 
 # Initialize Guitarparty api
@@ -19,26 +14,10 @@ GP = guitarparty.Guitarparty()
 def index(title=None):
     return render_template('index.html', title=title)
 
-#@app.route('/songs/')
-#def song_list():
-#    allsongs = Song.select()
-#    return object_list('song/index.html', allsongs)
-
-#@app.route('/songs/<id>/')
-#@auth.login_required
-#def song_detail(id):
-#    user = auth.get_logged_in_user()
-#    print user
-#    song = get_object_or_404(Song.select().where(id=id))
-#    if song.title:
-#        songlist = GP.get_query_songs( song.title )
-#        print songlist
-#    return render_template('song/detail.html', song=song)
-
 # Assumed that we have the Guitarparty Id of a particular song with this route
 @app.route('/api/gp/song/<id>')
 def gp_song_detail(id):
-    return GP.get_song( '/api/v2/songs/%s/' % (id) )
+    return GP.get_song( '/api/v2/songs/%s/' % id )
 
 # Here we only have the title of the song to do a query
 @app.route('/api/gp/songs/<title>')
@@ -59,5 +38,7 @@ def upload_file():
     else:
         return Response('not a valid filetype')
 
-
-
+@app.route('/api/song/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['SAVE_PATH'],
+        filename)

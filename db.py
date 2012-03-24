@@ -6,6 +6,7 @@ def process_mp3_song(path):
     tag.link(path)
     song = Song()
     # Check if song is already in DB
+    s_id = None
     song_is_dupe = False
     song_exists = Song.select().where(path=path)
     for s in song_exists:
@@ -65,7 +66,7 @@ def process_mp3_song(path):
             song.album = tag.getAlbum()
         if tag.getGenre():
             song.genre = tag.getGenre().getName()
-        song.update()
+        song.save()
         return 'ok'
 
 
