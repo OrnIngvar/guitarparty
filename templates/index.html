@@ -36,30 +36,52 @@
             var status = $('#status');
 
             function getSongs() {
-                $.getJSON("http://127.0.0.1:5000/api/song/",
-            {
-                format: "json"
-            },
-            function(json) {
-                var items = [];
-                var elem = [];
+                $.getJSON("/api/song/",
+                {
+                    format: "json"
+                },
+                function(json) {
+                    var items = [];
+                    var elem = [];
 
-                items = json.objects;
+                    items = json.objects;
 
-                $('.table > tbody').remove();
+                    $('.table > tbody').remove();
 
-                for (var i = 0; i < items.length; i++){
-                    console.log(items[i].title);
-                    elem.push('<tr><td><a href="#" class="icon-play"/></td>'+
-                            '<td>' + items[i].title + '</td>'+
-                            '<td>' + items[i].artist + '</td>'+
-                            '<td>' + items[i].album + '</td>'+
-                            '<td>' + items[i].genre + '</td>'+
-                            '</tr>');
-                }
-                $('<tbody/>', {
-                    html: elem.join('')
-                    }).appendTo('.table');
+                    for (var i = 0; i < items.length; i++){
+                        console.log(items[i].title);
+                        elem.push('<tr><td><a href="#" class="icon-play" id="play"/></td>'+
+                                '<td>' + items[i].title + '</td>'+
+                                '<td>' + items[i].artist + '</td>'+
+                                '<td>' + items[i].album + '</td>'+
+                                '<td>' + items[i].genre + '</td>'+
+                                '</tr>');
+                    }
+                    $('<tbody/>', {
+                        html: elem.join('')
+                        }).appendTo('.table');
+                });
+            }
+
+            function getChords(title) {
+                $.getJSON("/api/gp/songs/" + title,
+                {
+                    format: "json"
+                },
+                function(json) {
+                    var items = [];
+                    var elem = [];
+
+                    items = json.objects;
+
+                    $('#chords-container > pre').remove();
+
+                    for (var i = 0; i < items.length; i++){
+                        elem.push(items[i].body);
+                    }
+                    $('<pre/>', {
+                        html: elem.join('')
+                        }).appendTo('#chords-container');
                 });
             }
 
@@ -82,11 +104,19 @@
                 }
             });
 
-            $("#upload_song").click(function () {
+            $('#btn-upload-song').click(function () {
                 $("#upload").toggle();
             });
             $("#btn-hide-upload").click(function () {
+                $("#btn-upload-song").button('toggle');
                 $("#upload").toggle();
+            });
+
+            $('#tbl-songs').on("click", "tr", function(event) {
+                tdItem =  $(this).find("td:eq(1)");
+                if (tdItem.text()){
+                    getChords(tdItem.text());
+                }
             });
 
             getSongs();
@@ -99,17 +129,13 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
           <a class="brand" href="#">JamAlong</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li><a id="upload_song" href="#">Upload song</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
+          <div class="btn-toolbar">
+            <div class="btn-group">
+                <a class="btn btn-mini" data-toggle="button" id="btn-upload-song" href="#">Upload</a>
+                <a class="btn btn-mini" id="filter" href="#">Filter</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -120,7 +146,7 @@
                 <div class="page-header">
                     <h1>My song book</h1>
                 </div>
-                <table class="table">
+                <table class="table" id="tbl-songs">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -154,6 +180,7 @@
                     <div class="page-header">
                         <h1>Chords</h1>
                     </div>
+                    <div id="chords-container"></div>
                 </div>
             </div>
         </div>
