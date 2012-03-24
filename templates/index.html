@@ -34,9 +34,18 @@
             var bar = $('.bar');
             var percent = $('.percent');
             var status = $('#status');
-
-            function getSongs() {
-                $.getJSON("/api/song/",
+            var order = '';
+            function getOrderedSongs(params) {
+                if (order === ''){
+                    getSongs('ordering='+params);
+                    order = '-'
+                }else{
+                    getSongs('ordering='+order+params);
+                    order = '';
+                }
+            }
+            function getSongs(params) {
+                $.getJSON("/api/song/?"+params,
                 {
                     format: "json"
                 },
@@ -150,10 +159,18 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Song name</th>
-                      <th>Artist</th>
-                      <th>Album</th>
-                      <th>Genre</th>
+                      <th>
+                          <a href="#">Song name</a>
+                      </th>
+                      <th>
+                          <a href="#">Artist</a>
+                      </th>
+                      <th>
+                          <a href="#">Album</a>
+                      </th>
+                      <th>
+                          <a href="#">Genre</a>
+                      </th>
                     </tr>
                   </thead>
                 </table>
