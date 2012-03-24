@@ -119,8 +119,13 @@
                     getSongs();
                 }
             });
-            $('#filter_form').on('submit', function(){
-               console.log('ble');
+            $('#filter_form').submit(function(){
+                var field = $("#filter-field").val();
+                var type = $("#filter-type").val();
+                var value = $("#filter-value").val();
+                console.log(field+type+value);
+                getSongs(field+type+value);
+                return false;
             });
 
             $('#btn-filter-song').click(function(){
@@ -133,6 +138,16 @@
                 $("#btn-upload-song").button('toggle');
                 $("#upload").toggle();
             });
+
+            $("#btn-hide-filter").click(function () {
+                $("#btn-filter-song").button('toggle');
+                $("#filter-content").toggle();
+            });
+
+            $("#btn-reset-filter").click(function () {
+                getSongs('');
+            });
+
 
             $('#tbl-songs').on("click", "tr", function(event) {
                 tdItem =  $(this).find("td:eq(1)");
@@ -171,7 +186,7 @@
           <div class="btn-toolbar">
             <div class="btn-group">
                 <a class="btn btn-mini" data-toggle="button" id="btn-upload-song" href="#">Upload</a>
-                <a class="btn btn-mini" id="btn-filter-song" href="#">Filter</a>
+                <a class="btn btn-mini" data-toggle="button" id="btn-filter-song" href="#">Filter</a>
             </div>
           </div>
         </div>
@@ -189,19 +204,19 @@
                         <div class="controls">
                             <select id="filter-field" >
                                 <option value="title">Song name</option>
-                                <option>Artist</option>
-                                <option>Album</option>
-                                <option>Genre</option>
+                                <option value="artist">Artist</option>
+                                <option value="album">Album</option>
+                                <option value="genre">Genre</option>
                             </select>
                             <select id="filter-type" >
-                                <option>Equals</option>
-                                <option>Contains</option>
-                                <option>starts with</option>
+                                <option value="=">Equals</option>
+                                <option value="__icontains=">Contains</option>
+                                <option value="__istartswith=">starts with</option>
                             </select>
 
-                            <input type="text" class="btn" name="filter-value" >
+                            <input type="text" id="filter-value" name="filter-value" >
                             <input type="submit" class="btn" value="Apply filter ">
-
+                            <div class="btn" id="btn-reset-filter">Reset filter</div>
                             <div class="btn" id="btn-hide-filter">Done</div>
                         </div>
                     </form>
