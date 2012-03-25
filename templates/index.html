@@ -163,38 +163,53 @@
             $('#tbl-songs').on("click", "tr", function(event) {
                 var tdItem =  $(this).find("td:eq(1)");
                 var tdItemAudio =  $(this).find("td:eq(0)");
-                if (tdItem.text()){
-                    getChords(tdItem.text());
-                    $.getJSON("/api/song/?title=" + tdItem.text(),
-                    {
-                        format: "json"
-                    },
-                    function(json) {
-                        var items = [];
-                        var elem = [];
-                        var path;
-                        var re = '\/';
+                var re = '\/';
+                var songTitle = $("#media-player > div").children().children().attr('id');
 
-                        items = json.objects;
-
-                        $('#media-player > div').remove();
-
-                        for (var i = 0; i < items.length; i++) {
-                            path = items[i].path;
+                if (songTitle) {
+                    if (tdItem.text()) {
+                        console.log('songTitle= ' + songTitle);
+                        console.log('tdItem= ' + tdItem)
+                        if (songTitle == tdItem.text()) {
+                            $('#media-player > div').remove();
+                            tdItemAudio.html('<a href="#" class="icon-play" id="play"/>');
                         }
+                    }
+                } else {
+                    if (tdItem.text()) {
+                        getChords(tdItem.text());
+                        $.getJSON("/api/song/?title=" + tdItem.text(),
+                        {
+                            format: "json"
+                        },
+                        function(json) {
+                            var items = [];
+                            var elem = [];
+                            var path;
+                            var title;
 
-                        var currPath = path.split(re);
+                            items = json.objects;
 
-                        elem.push('<audio autoplay="autoplay">'+
-                                  '<source src="/api/song/uploads/' + currPath[1] + '"' + 'type="audio/mpeg"/>'+
-                                  'Your browser does not support the audio element.'+
-                                  '</audio>');
-                        $('<div/>', {
-                            html: elem.join('')
-                        }).appendTo('#media-player');
+                            $('#media-player > div').remove();
 
-                        tdItemAudio.html('<a href="#" class="icon-stop" id="stop"/>');
-                    });
+                            for (var i = 0; i < items.length; i++) {
+                                path = items[i].path;
+                                title = items[i].title;
+                            }
+
+                            var currPath = path.split(re);
+
+                            elem.push('<audio autoplay="autoplay">'+
+                                      '<source id="' + title +'" src="/api/song/uploads/' + currPath[1] + '"' + 'type="audio/mpeg"/>'+
+                                      'Your browser does not support the audio element.'+
+                                      '</audio>');
+                            $('<div/>', {
+                                html: elem.join('')
+                            }).appendTo('#media-player');
+
+                            tdItemAudio.html('<a href="#" class="icon-stop" id="stop"/>');
+                        });
+                    }
                 }
             });
 
