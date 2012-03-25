@@ -1,4 +1,5 @@
 import os
+import socket
 from werkzeug.utils import secure_filename
 from flask import request, render_template, send_from_directory
 from werkzeug.wrappers import Response
@@ -40,5 +41,10 @@ def upload_file():
 
 @app.route('/api/song/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['SAVE_PATH'],
-        filename)
+    try:
+        file = send_from_directory(app.config['SAVE_PATH'], filename)
+        return file
+    except socket.error, e:
+        print 'socket error in send_from_directory'
+    except:
+        print 'general exception'

@@ -1,3 +1,4 @@
+import socket
 import requests
 import logging
 
@@ -32,13 +33,24 @@ class Guitarparty(object):
 
     def get_query_songs(self, query):
         url = '%s/songs/?query=%s&' % (self.url, query)
-        r = self.make_request( 'get', url , headers=self.head )
-        return r.content
+        try:
+            r = self.make_request( 'get', url , headers=self.head )
+            print r.content
+            return r.content
+        except socket.error, e:
+            print 'a socket in query_songs error'
+        except IOError, e:
+            print 'a IO error in query_songs'
 
     def get_song(self, uri):
         url = '%s%s' % (self.host, uri)
-        r = self.make_request( 'get', url )
-        return r.content
+        try:
+            r = self.make_request( 'get', url )
+            return r.content
+        except socket.error, e:
+            print 'a socket error in get_song'
+        except IOError, e:
+            print 'a IO error in query_songs'
 
     def get_query_artists(self, query):
         url = '%s/artists/?query=%s&' % (self.url, query)
