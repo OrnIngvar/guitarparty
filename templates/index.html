@@ -37,6 +37,7 @@
             var order = '';
             var filter = '';
             function getOrderedSongs(params) {
+
                 if (order === ''){
                     if (filter === ''){
                         getSongs('ordering='+params);
@@ -126,7 +127,7 @@
                 },
                 complete: function(xhr) {
                     status.html(xhr.responseText);
-                    getSongs();
+                    getSongs('');
                 }
             });
             $('#filter_form').submit(function(){
@@ -161,6 +162,7 @@
 
             $('#tbl-songs').on("click", "tr", function(event) {
                 var tdItem =  $(this).find("td:eq(1)");
+                var tdItemAudio =  $(this).find("td:eq(0)");
                 if (tdItem.text()){
                     getChords(tdItem.text());
                     $.getJSON("/api/song/?title=" + tdItem.text(),
@@ -243,13 +245,13 @@
                     </div>
                     <form class="well form-inline" id="filter_form" action="#">
                         <div class="controls">
-                            <select id="filter-field" >
+                            <select class="span2" id="filter-field" >
                                 <option value="title">Song name</option>
                                 <option value="artist">Artist</option>
                                 <option value="album">Album</option>
                                 <option value="genre">Genre</option>
                             </select>
-                            <select id="filter-type" >
+                            <select class="span2" id="filter-type" >
                                 <option value="=">Equals</option>
                                 <option value="__icontains=">Contains</option>
                                 <option value="__istartswith=">starts with</option>
