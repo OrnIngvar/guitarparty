@@ -200,15 +200,15 @@
                             tdItemAudio.html('<a href="#" class="icon-play" id="play"/>');
                             loadNewSong = false;
                         } else {
-                            $("#tbl-songs tr").each(function() {
+/*                            $("#tbl-songs tr").each(function() {
                                 var titleCol = $(this).find("td:eq(1)");
                                 var controlCol = $(this).find("td:eq(0)");
                                 if (titleCol.text() == songTitle) {
                                     controlCol.html('<a href="#" class="icon-play" id="play"/>');
                                 }
                                 console.log(titleCol.text());
-                            });
-                            loadNewSong = true;
+                            });*/
+                            loadNewSong = false;
                         }
                     }
                 } if (loadNewSong) {
