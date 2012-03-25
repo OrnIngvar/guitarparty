@@ -189,6 +189,7 @@
                 var tdItemAudio =  $(this).find("td:eq(0)");
                 var re = '\/';
                 var songTitle = $("#media-player > div").children().children().attr('id');
+                var loadNewSong = true;
 
                 if (songTitle) {
                     if (tdItem.text()) {
@@ -197,43 +198,52 @@
                         if (songTitle == tdItem.text()) {
                             $('#media-player > div').remove();
                             tdItemAudio.html('<a href="#" class="icon-play" id="play"/>');
+                            loadNewSong = false;
+                        } else {
+                            $("#tbl-songs tr").each(function() {
+                                var titleCol = $(this).find("td:eq(1)");
+                                var controlCol = $(this).find("td:eq(0)");
+                                if (titleCol.text() == songTitle) {
+                                    controlCol.html('<a href="#" class="icon-play" id="play"/>');
+                                }
+                                console.log(titleCol.text());
+                            });
+                            loadNewSong = true;
                         }
                     }
-                } else {
-                    if (tdItem.text()) {
-                        getChords(tdItem.text());
-                        $.getJSON("/api/song/?title=" + tdItem.text(),
-                        {
-                            format: "json"
-                        },
-                        function(json) {
-                            var items = [];
-                            var elem = [];
-                            var path;
-                            var title;
+                } if (loadNewSong) {
+                    getChords(tdItem.text());
+                    $.getJSON("/api/song/?title=" + tdItem.text(),
+                    {
+                        format: "json"
+                    },
+                    function(json) {
+                        var items = [];
+                        var elem = [];
+                        var path;
+                        var title;
 
-                            items = json.objects;
+                        items = json.objects;
 
-                            $('#media-player > div').remove();
+                        $('#media-player > div').remove();
 
-                            for (var i = 0; i < items.length; i++) {
-                                path = items[i].path;
-                                title = items[i].title;
-                            }
+                        for (var i = 0; i < items.length; i++) {
+                            path = items[i].path;
+                            title = items[i].title;
+                        }
 
-                            var currPath = path.split(re);
+                        var currPath = path.split(re);
 
-                            elem.push('<audio autoplay="autoplay">'+
-                                      '<source id="' + title +'" src="/api/song/uploads/' + currPath[1] + '"' + 'type="audio/mpeg"/>'+
-                                      'Your browser does not support the audio element.'+
-                                      '</audio>');
-                            $('<div/>', {
-                                html: elem.join('')
-                            }).appendTo('#media-player');
+                        elem.push('<audio autoplay="autoplay">'+
+                                  '<source id="' + title +'" src="/api/song/uploads/' + currPath[1] + '"' + 'type="audio/mpeg"/>'+
+                                  'Your browser does not support the audio element.'+
+                                  '</audio>');
+                        $('<div/>', {
+                            html: elem.join('')
+                        }).appendTo('#media-player');
 
-                            tdItemAudio.html('<a href="#" class="icon-stop" id="stop"/>');
-                        });
-                    }
+                        tdItemAudio.html('<a href="#" class="icon-stop" id="stop"/>');
+                    });
                 }
             });
 
