@@ -111,6 +111,9 @@
                         }).appendTo('#chords-container');
                 });
             }
+            function reset_form(){
+                $('#uploadFile_span').html($('#uploadFile_span').html());
+            }
 
             $('#upload_form').ajaxForm({
                 beforeSend: function() {
@@ -126,7 +129,28 @@
                     //console.log(percentVal, position, total);
                 },
                 complete: function(xhr) {
+                    if(xhr.responseText === 'ok'){
+                        $(status).addClass('alert alert-success');
+                    }
+                    else if(xhr.responseText !== 'error'){
+                        $(status).addClass('alert alert-info');
+                    }else{
+                        $(status).addClass('alert alert-error');
+                    }
+
                     status.html(xhr.responseText);
+                    //Clear the file field, status bar and response text
+                    setInterval(function(){
+                        status.empty();
+                        var percentVal = '0%';
+                        bar.width(percentVal);
+                        percent.html(percentVal);
+                        $(status).removeClass('alert');
+                        //This disables the file input field after first time use
+//                        reset_form();
+                    }, 3000);
+
+
                     getSongs('');
                 }
             });
@@ -310,7 +334,9 @@
                         <h1>Upload new song</h1>
                     </div>
                     <form class="well form-inline" id="upload_form" action="/api/songs/upload" enctype="multipart/form-data">
-                        <input type="file" class="btn" name="file" >
+                        <span id="uploadFile_span" class="inline">
+                            <input type="file" class="btn" name="file" >
+                        </span>
                         <input type="submit" class="btn" value="Upload ">
                         <div class="btn" id="btn-hide-upload">Done</div>
                         <p>
